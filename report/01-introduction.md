@@ -14,3 +14,8 @@ Integrate a recipe suggestion feature that recommends meals based on the user's 
 Log user actions to measure the system's impact on waste reduction.
 5. Preliminaries
 The first version of FreshTrack will include manual item entry, expiry reminders, photo-based ingredient recognition for a limited set of common ingredients, and recipe suggestions via an external recipe API. It will not include barcode scanning, grocery store integrations, nutrition or calorie tracking, or support for multiple users per household. The recipe database will not be built from scratch; instead, the Spoonacular API will be used for recipe search and ranking by ingredient match (Spoonacular, 2026). Ingredient recognition will be implemented using transfer learning rather than training a model from scratch, following the approach recommended in the TensorFlow documentation (TensorFlow, 2026).
+
+Mathisen, T. F., & Johansen, F. R. (2022). The impact of smartphone apps designed to reduce food waste on improving healthy eating, financial expenses and personal food waste. JMIR Formative Research, 6(10), e39275. https://doi.org/10.2196/39275
+Morol, M. K., Rabbi, M. F., Sultana, M., & Rokon, M. I. H. (2022). Food recipe recommendation based on ingredient detection using deep learning. In Proceedings of the 2nd International Conference on Computing Advancements. ACM. https://arxiv.org/abs/2203.06721
+Spoonacular. (2026). Food API documentation. https://spoonacular.com/food-api/docs
+TensorFlow. (2026). Transfer learning and fine-tuning with Keras. https://www.tensorflow.org/guide/keras/transfer_learning
