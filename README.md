@@ -25,6 +25,7 @@ anyone managing a kitchen who wants to save money and waste less.
 
 ## Current Status
 Week 1 – Project definition and initial research
+Next: dataset collection for ingredient recognition.
 
 ## References
 - Mathisen, T. F., & Johansen, F. R. (2022). The impact of smartphone apps
