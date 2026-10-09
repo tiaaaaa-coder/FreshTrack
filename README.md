@@ -34,6 +34,9 @@ Next: dataset collection for ingredient recognition.
 - Morol, M. K., et al. (2022). Food recipe recommendation based on ingredient
   detection using deep learning. https://arxiv.org/abs/2203.06721
 - TensorFlow (2026). Transfer learning and fine-tuning with Keras.
+## Roadmap
+- Week 2: gather ingredient image dataset, set up project structure
+- Week 3: baseline ingredient classifier using transfer learning- 
   https://www.tensorflow.org/guide/keras/transfer_learning
 - Spoonacular (2026). Food API documentation.
   https://spoonacular.com/food-api/docs
