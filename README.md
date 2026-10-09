@@ -1,2 +1,38 @@
-# FreshTrack
-AI Powered Pantry &amp; Meal Assistant to reduce household food waste. Altınbaş University Graduation Project 2026-2027
+# FreshTrack 
+AI Powered Pantry & Meal Assistant to reduce household food waste. 
+Altınbaş University Graduation Project 2026-2027
+
+## Project Description
+FreshTrack helps households and small stores reduce food waste. Users track
+pantry items with expiry dates, receive reminders before food expires, and
+get meal suggestions generated from ingredients they already have either
+entered manually or detected from a photo.
+
+## Objective
+Reduce household food waste and grocery costs by combining expiry tracking
+with AI powered recipe suggestions prioritized by items nearing expiry.
+
+## Target Users
+Students, families, young professionals, convenience store employees, and
+anyone managing a kitchen who wants to save money and waste less.
+
+## Planned Technologies
+- Python (FastAPI) backend, PostgreSQL database
+- TensorFlow/Keras (MobileNetV2 transfer learning) for ingredient detection
+- Spoonacular API for recipe suggestions
+- React (web frontend)
+- Firebase Cloud Messaging for expiry notifications
+
+## Current Status
+Week 1 – Project definition and initial research
+
+## References
+- Mathisen, T. F., & Johansen, F. R. (2022). The impact of smartphone apps
+  designed to reduce food waste... JMIR Formative Research.
+  https://doi.org/10.2196/39275
+- Morol, M. K., et al. (2022). Food recipe recommendation based on ingredient
+  detection using deep learning. https://arxiv.org/abs/2203.06721
+- TensorFlow (2026). Transfer learning and fine-tuning with Keras.
+  https://www.tensorflow.org/guide/keras/transfer_learning
+- Spoonacular (2026). Food API documentation.
+  https://spoonacular.com/food-api/docs
