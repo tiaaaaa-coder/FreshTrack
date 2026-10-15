@@ -23,7 +23,7 @@ anyone managing a kitchen who wants to save money and waste less.
 - React (web frontend)
 - Firebase Cloud Messaging for expiry notifications
 
-## Current Status
+## Week 1 Status
 Week 1 – Project definition and initial research
 Next: dataset collection for ingredient recognition.
 ## Planned Features
