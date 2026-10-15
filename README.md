@@ -26,6 +26,31 @@ anyone managing a kitchen who wants to save money and waste less.
 ## Current Status
 Week 1 – Project definition and initial research
 Next: dataset collection for ingredient recognition.
+## Planned Features
+- FR-01: Add/view/remove pantry items with expiry dates
+- FR-03: Configurable expiry warnings (default 3 days)
+- FR-04: Recipe suggestions via Spoonacular API, ranked by expiry
+- FR-05: Photo-based ingredient recognition (transfer learning, 10–20 classes)
+- FR-06: "Used vs discarded" waste statistics
+
+## Scope (Week 2)
+In scope v1: pantry tracking, expiry warnings, recipe suggestions, photo
+ingredient recognition, waste statistics.
+Out of scope v1: barcode scanning, grocery-store integrations,
+multi-user households, nutrition tracking.
+
+## Current Status
+Week 2 – Requirements engineering completed. Functional requirements
+(FR-01–FR-06), non-functional requirements (NFR-01–NFR-03), user stories
+(US-01–US-03), and milestone plan defined. Development starts Week 3 with
+architecture design.
+
+## Tech Stack
+- Backend: Python + FastAPI
+- Frontend: React
+- Database: PostgreSQL
+- ML: TensorFlow/Keras (MobileNetV2 transfer learning)
+- Recipe data: Spoonacular API
 
 ## References
 - Mathisen, T. F., & Johansen, F. R. (2022). The impact of smartphone apps
