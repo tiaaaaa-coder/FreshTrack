@@ -7,6 +7,7 @@
 - Added the proposed system architecture diagram and its editable diagrams.net source.
 - Added the component interfaces and design decisions documents.
 - Added a proposed architecture summary to the README.
+- Added the methodology and system design chapter to the cumulative report in `report/02-methodology-system-design.md`.
 
 ## New diagrams / files
 - `docs/design/fresh-track-architecture.png`
@@ -14,7 +15,7 @@
 - `docs/design/component-interfaces.md`
 - `docs/design/design-decisions.md`
 - `README.md` — proposed architecture summary
-
+- `report/02-methodology-system-design.md`
 ## GitHub commit links or hashes
 - [FreshTrack commit history](https://github.com/tiaaaaa-coder/FreshTrack/commits/)
 
@@ -31,7 +32,11 @@
 - TensorFlow transfer learning guide: https://www.tensorflow.org/guide/keras/transfer_learning
 
 ## Report sections updated
-- Draft content prepared for system architecture, component responsibilities, data flow, and technology decisions. Report update is not yet completed.
+- Methodology
+- Proposed System
+- System Architecture, including Figure 3.1 and its explanation
+- Technology Selection and Design Decisions
+- Design risks and limitations
 
 ## Week 4 prototype objective
 - Demonstrate adding a pantry item through the React interface, saving it with the FastAPI `POST /items` endpoint to PostgreSQL, and displaying the saved item in the pantry list.
