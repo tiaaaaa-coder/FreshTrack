@@ -65,3 +65,9 @@ architecture design.
   https://www.tensorflow.org/guide/keras/transfer_learning
 - Spoonacular (2026). Food API documentation.
   https://spoonacular.com/food-api/docs
+  
+  ## Proposed Architecture
+
+Fresh Track is planned as a React web interface connected to a FastAPI backend. The backend will store pantry items and expiry dates in PostgreSQL, use a MobileNetV2 inference module to classify uploaded food photos, and query Spoonacular through a recipe service for meal suggestions. Model training and evaluation will run separately during development.
+
+See the [system architecture diagram](docs/design/fresh-track-architecture.png) and its [editable diagrams.net source](docs/design/fresh-track-architecture.drawio).
