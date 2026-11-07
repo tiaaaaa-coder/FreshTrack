@@ -1,20 +1,22 @@
 # Week 3 Progress Log — Fresh Track
 
 ## Tasks planned and completed
-- Reviewed the Week 2 requirements and mapped FR-01, FR-04, FR-05, NFR-01, and NFR-02 to proposed system components.
-- Drafted the component responsibilities and system boundaries.
-- Described the pantry-item creation flow and an invalid-input case.
-- Prepared two architecture decision records: PostgreSQL for pantry data and transfer learning for ingredient classification.
-- Planned the high-level architecture diagram. The diagram has not yet been created or added to the repository.
+- Mapped FR-01, FR-04, FR-05, NFR-01, and NFR-02 to proposed system components.
+- Documented component responsibilities, system boundaries, and the pantry-item creation flow.
+- Recorded two architecture decisions: PostgreSQL for pantry data and transfer learning for ingredient classification.
+- Added the proposed system architecture diagram and its editable diagrams.net source.
+- Added the component interfaces and design decisions documents.
+- Added a proposed architecture summary to the README.
 
 ## New diagrams / files
-- Planned: `docs/design/architecture.png`
-- Planned: `docs/design/architecture-source.drawio`
-- Planned: `docs/design/component-interfaces.md`
-- Planned: `docs/design/design-decisions.md`
+- `docs/design/fresh-track-architecture.png`
+- `docs/design/fresh-track-architecture.drawio`
+- `docs/design/component-interfaces.md`
+- `docs/design/design-decisions.md`
+- `README.md` — proposed architecture summary
 
 ## GitHub commit links or hashes
-- To be added after the design files are committed.
+- [FreshTrack commit history](https://github.com/tiaaaaa-coder/FreshTrack/commits/)
 
 ## Technical problems found
 - No implementation problems investigated during this design work.
