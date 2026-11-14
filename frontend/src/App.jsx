@@ -1,6 +1,26 @@
 import { useEffect, useState } from "react";
 
 const API_URL = "http://127.0.0.1:8000";
+const WARNING_DAYS_KEY = "freshTrackWarningDays";
+
+function getDaysUntilExpiry(expiryDate) {
+  const [year, month, day] = expiryDate.split("-").map(Number);
+  const expiry = Date.UTC(year, month - 1, day);
+
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+
+  return Math.round((expiry - today) / 86400000);
+}
+
+function getInitialWarningDays() {
+  const saved = window.localStorage.getItem(WARNING_DAYS_KEY);
+
+  if (saved === null) return 3;
+
+  const value = Number(saved);
+  return Number.isInteger(value) && value >= 0 && value <= 30 ? value : 3;
+}
 
 export default function App() {
   const [items, setItems] = useState([]);
@@ -9,6 +29,16 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [warningDays, setWarningDays] = useState(getInitialWarningDays);
+
+  const expiredItems = items.filter(
+    (item) => getDaysUntilExpiry(item.expiry_date) < 0
+  );
+
+  const expiringItems = items.filter((item) => {
+    const days = getDaysUntilExpiry(item.expiry_date);
+    return days >= 0 && days <= warningDays;
+  });
 
   async function loadItems() {
     setMessage("");
@@ -20,8 +50,7 @@ export default function App() {
         throw new Error("Could not load pantry items.");
       }
 
-      const data = await response.json();
-      setItems(data);
+      setItems(await response.json());
     } catch {
       setMessage("Could not connect to the API. Check that the backend is running.");
     } finally {
@@ -85,11 +114,52 @@ export default function App() {
     }
   }
 
+  function handleWarningDaysChange(event) {
+    const value = Math.min(30, Math.max(0, Number(event.target.value || 0)));
+    setWarningDays(value);
+    window.localStorage.setItem(WARNING_DAYS_KEY, String(value));
+  }
+
   return (
     <main style={styles.page}>
       <section style={styles.card}>
         <h1 style={styles.title}>Fresh Track</h1>
         <p style={styles.subtitle}>Keep track of what’s in your pantry.</p>
+
+        <div style={styles.setting}>
+          <label htmlFor="warning-days" style={styles.label}>
+            Warn me before expiry
+          </label>
+          <div style={styles.settingControl}>
+            <input
+              id="warning-days"
+              type="number"
+              min="0"
+              max="30"
+              value={warningDays}
+              onChange={handleWarningDaysChange}
+              style={styles.daysInput}
+            />
+            <span>days</span>
+          </div>
+        </div>
+
+        {(expiredItems.length > 0 || expiringItems.length > 0) && (
+          <div style={styles.alert}>
+            {expiredItems.length > 0 && (
+              <p>
+                <strong>Expired:</strong>{" "}
+                {expiredItems.map((item) => item.name).join(", ")}
+              </p>
+            )}
+            {expiringItems.length > 0 && (
+              <p>
+                <strong>Use soon:</strong>{" "}
+                {expiringItems.map((item) => item.name).join(", ")}
+              </p>
+            )}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={styles.form}>
           <label htmlFor="item-name" style={styles.label}>
@@ -132,21 +202,30 @@ export default function App() {
           <p>Your pantry is empty. Add your first item above.</p>
         ) : (
           <ul style={styles.list}>
-            {items.map((item) => (
-              <li key={item.id} style={styles.item}>
-                <div style={styles.itemDetails}>
-                  <strong>{item.name}</strong>
-                  <span>Expires: {item.expiry_date}</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item.id)}
-                  style={styles.removeButton}
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
+            {items.map((item) => {
+              const days = getDaysUntilExpiry(item.expiry_date);
+
+              return (
+                <li key={item.id} style={styles.item}>
+                  <div style={styles.itemDetails}>
+                    <strong>{item.name}</strong>
+                    <span>Expires: {item.expiry_date}</span>
+                    {days < 0 ? (
+                      <span style={styles.expiredBadge}>Expired</span>
+                    ) : days <= warningDays ? (
+                      <span style={styles.warningBadge}>Expiring soon</span>
+                    ) : null}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(item.id)}
+                    style={styles.removeButton}
+                  >
+                    Remove
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
@@ -182,10 +261,42 @@ const styles = {
     color: "#77765f",
     textAlign: "center",
   },
+  setting: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "16px",
+    marginTop: "28px",
+    padding: "14px",
+    borderRadius: "12px",
+    background: "#f2f2e8",
+  },
+  settingControl: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+  daysInput: {
+    width: "64px",
+    padding: "8px",
+    border: "1px solid #cbd0ae",
+    borderRadius: "8px",
+    background: "white",
+    color: "#343b29",
+    fontSize: "1rem",
+    colorScheme: "light",
+  },
+  alert: {
+    marginTop: "16px",
+    padding: "12px 16px",
+    borderRadius: "12px",
+    background: "#f8e2e7",
+    color: "#763d4d",
+  },
   form: {
     display: "grid",
     gap: "12px",
-    marginTop: "30px",
+    marginTop: "24px",
   },
   label: {
     color: "#505b36",
@@ -238,6 +349,22 @@ const styles = {
   itemDetails: {
     display: "grid",
     gap: "6px",
+  },
+  warningBadge: {
+    width: "fit-content",
+    padding: "4px 8px",
+    borderRadius: "999px",
+    background: "#f8e2e7",
+    color: "#763d4d",
+    fontSize: "0.85rem",
+  },
+  expiredBadge: {
+    width: "fit-content",
+    padding: "4px 8px",
+    borderRadius: "999px",
+    background: "#763d4d",
+    color: "#ffffff",
+    fontSize: "0.85rem",
   },
   removeButton: {
     padding: "9px 13px",
