@@ -64,6 +64,27 @@ export default function App() {
     }
   }
 
+  async function handleDelete(itemId) {
+    setMessage("");
+
+    try {
+      const response = await fetch(`${API_URL}/items/${itemId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not remove this item.");
+      }
+
+      setItems((currentItems) =>
+        currentItems.filter((item) => item.id !== itemId)
+      );
+      setMessage("Item removed from your pantry.");
+    } catch (error) {
+      setMessage(error.message || "Could not remove the item.");
+    }
+  }
+
   return (
     <main style={styles.page}>
       <section style={styles.card}>
@@ -71,7 +92,9 @@ export default function App() {
         <p style={styles.subtitle}>Keep track of what’s in your pantry.</p>
 
         <form onSubmit={handleSubmit} style={styles.form}>
-          <label htmlFor="item-name">Food name</label>
+          <label htmlFor="item-name" style={styles.label}>
+            Food name
+          </label>
           <input
             id="item-name"
             type="text"
@@ -79,18 +102,22 @@ export default function App() {
             onChange={(event) => setName(event.target.value)}
             placeholder="For example, Milk"
             required
+            style={styles.input}
           />
 
-          <label htmlFor="expiry-date">Expiry date</label>
+          <label htmlFor="expiry-date" style={styles.label}>
+            Expiry date
+          </label>
           <input
             id="expiry-date"
             type="date"
             value={expiryDate}
             onChange={(event) => setExpiryDate(event.target.value)}
             required
+            style={styles.input}
           />
 
-          <button type="submit" disabled={saving}>
+          <button type="submit" disabled={saving} style={styles.addButton}>
             {saving ? "Adding…" : "Add to pantry"}
           </button>
         </form>
@@ -107,8 +134,17 @@ export default function App() {
           <ul style={styles.list}>
             {items.map((item) => (
               <li key={item.id} style={styles.item}>
-                <strong>{item.name}</strong>
-                <span>Expires: {item.expiry_date}</span>
+                <div style={styles.itemDetails}>
+                  <strong>{item.name}</strong>
+                  <span>Expires: {item.expiry_date}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(item.id)}
+                  style={styles.removeButton}
+                >
+                  Remove
+                </button>
               </li>
             ))}
           </ul>
@@ -121,30 +157,95 @@ export default function App() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#f2f7f1",
+    background: "linear-gradient(135deg, #f4f2e8 0%, #fae9ed 100%)",
     padding: "48px 20px",
     fontFamily: "Arial, sans-serif",
-    color: "#203328",
+    color: "#343b29",
   },
   card: {
-    maxWidth: "620px",
+    maxWidth: "680px",
     margin: "0 auto",
-    background: "white",
-    padding: "32px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 28px rgba(32, 51, 40, 0.1)",
+    background: "#fffdf8",
+    padding: "36px",
+    borderRadius: "24px",
+    border: "1px solid #e9e4d5",
+    boxShadow: "0 12px 32px rgba(68, 75, 45, 0.12)",
   },
-  title: { margin: 0, color: "#24734b" },
-  subtitle: { marginTop: "8px", color: "#5f7065" },
-  form: { display: "grid", gap: "10px", marginTop: "28px" },
-  heading: { marginTop: "32px" },
-  list: { listStyle: "none", padding: 0 },
+  title: {
+    margin: 0,
+    color: "#687443",
+    fontSize: "2.5rem",
+    textAlign: "center",
+  },
+  subtitle: {
+    marginTop: "8px",
+    color: "#77765f",
+    textAlign: "center",
+  },
+  form: {
+    display: "grid",
+    gap: "12px",
+    marginTop: "30px",
+  },
+  label: {
+    color: "#505b36",
+    fontWeight: "bold",
+  },
+  input: {
+    boxSizing: "border-box",
+    width: "100%",
+    padding: "13px 14px",
+    border: "1px solid #cbd0ae",
+    borderRadius: "10px",
+    background: "#ffffff",
+    color: "#343b29",
+    fontSize: "1rem",
+    colorScheme: "light",
+  },
+  addButton: {
+    marginTop: "8px",
+    padding: "14px",
+    border: "none",
+    borderRadius: "10px",
+    background: "#687443",
+    color: "#ffffff",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+  message: {
+    color: "#586737",
+    background: "#f0f2e6",
+    padding: "12px",
+    borderRadius: "10px",
+  },
+  heading: {
+    marginTop: "34px",
+    color: "#505b36",
+  },
+  list: {
+    listStyle: "none",
+    padding: 0,
+  },
   item: {
     display: "flex",
+    alignItems: "center",
     justifyContent: "space-between",
     gap: "16px",
-    padding: "14px 0",
-    borderBottom: "1px solid #e4ebe5",
+    padding: "15px 0",
+    borderBottom: "1px solid #e9e4d5",
   },
-  message: { color: "#24734b" },
+  itemDetails: {
+    display: "grid",
+    gap: "6px",
+  },
+  removeButton: {
+    padding: "9px 13px",
+    border: "1px solid #e7bdc7",
+    borderRadius: "9px",
+    background: "#f8e2e7",
+    color: "#763d4d",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
 };
