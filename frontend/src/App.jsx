@@ -113,7 +113,32 @@ export default function App() {
       setMessage(error.message || "Could not remove the item.");
     }
   }
+  async function handleMarkUsed(itemId) {
+    setMessage("");
 
+    try {
+      const response = await fetch(`${API_URL}/items/${itemId}/use`, {
+        method: "POST",
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.detail || "Could not mark this item as used.");
+      }
+
+      setItems((currentItems) =>
+        currentItems.filter((item) => item.id !== itemId)
+      );
+      setMessage(
+        `${result.item_name} marked as used on ${new Date(
+          result.used_at
+        ).toLocaleString()}.`
+      );
+    } catch (error) {
+      setMessage(error.message || "Could not mark this item as used.");
+    }
+  }  
   function handleWarningDaysChange(event) {
     const value = Math.min(30, Math.max(0, Number(event.target.value || 0)));
     setWarningDays(value);
@@ -216,13 +241,22 @@ export default function App() {
                       <span style={styles.warningBadge}>Expiring soon</span>
                     ) : null}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(item.id)}
-                    style={styles.removeButton}
-                  >
-                    Remove
-                  </button>
+                                   <div style={{ display: "flex", gap: "8px" }}>
+                    <button
+                      type="button"
+                      onClick={() => handleMarkUsed(item.id)}
+                      style={styles.usedButton}
+                    >
+                      Used
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(item.id)}
+                      style={styles.removeButton}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </li>
               );
             })}
@@ -365,6 +399,15 @@ const styles = {
     background: "#763d4d",
     color: "#ffffff",
     fontSize: "0.85rem",
+  },
+    usedButton: {
+    padding: "9px 13px",
+    border: "none",
+    borderRadius: "9px",
+    background: "#687443",
+    color: "#ffffff",
+    fontWeight: "bold",
+    cursor: "pointer",
   },
   removeButton: {
     padding: "9px 13px",
