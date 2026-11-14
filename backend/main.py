@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 import os
 
@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field, field_validator
-from sqlalchemy import Date, Integer, String, create_engine, select
+from sqlalchemy import Date, DateTime, Integer, String, create_engine, func, select
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
@@ -35,8 +35,19 @@ class PantryItem(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     expiry_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    
+class UsageEvent(Base):
+    __tablename__ = "usage_events"
 
-
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    item_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    item_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    action: Mapped[str] = mapped_column(String(20), nullable=False)
+    occurred_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Fresh Track API")
@@ -107,3 +118,27 @@ def remove_item(item_id: int, db: Session = Depends(get_db)):
     db.delete(item)
     db.commit()
     return {"message": "Pantry item deleted"}
+@app.post("/items/{item_id}/use")
+def mark_item_used(item_id: int, db: Session = Depends(get_db)):
+    item = db.get(PantryItem, item_id)
+
+    if item is None:
+        raise HTTPException(status_code=404, detail="Pantry item not found")
+
+    event = UsageEvent(
+        item_id=item.id,
+        item_name=item.name,
+        action="used",
+    )
+    db.add(event)
+    db.delete(item)
+    db.commit()
+    db.refresh(event)
+
+    return {
+        "message": "Item marked as used",
+        "item_id": event.item_id,
+        "item_name": event.item_name,
+        "action": event.action,
+        "used_at": event.occurred_at,
+    }
