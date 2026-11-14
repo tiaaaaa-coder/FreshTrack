@@ -96,7 +96,8 @@ def create_item(item_data: PantryItemCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(item)
     return item
-    @app.delete("/items/{item_id}")
+
+@app.delete("/items/{item_id}")
 def remove_item(item_id: int, db: Session = Depends(get_db)):
     item = db.get(PantryItem, item_id)
 
