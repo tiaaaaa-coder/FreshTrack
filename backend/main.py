@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 
 from dotenv import load_dotenv
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import Date, Integer, String, create_engine, select
@@ -96,3 +96,13 @@ def create_item(item_data: PantryItemCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(item)
     return item
+    @app.delete("/items/{item_id}")
+def remove_item(item_id: int, db: Session = Depends(get_db)):
+    item = db.get(PantryItem, item_id)
+
+    if item is None:
+        raise HTTPException(status_code=404, detail="Pantry item not found")
+
+    db.delete(item)
+    db.commit()
+    return {"message": "Pantry item deleted"}
